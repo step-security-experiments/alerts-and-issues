@@ -1,0 +1,23 @@
+name: Test GitHubToken Permissions
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-permissions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      actions: write
+      statuses: write  # These permissions are too broad, especially for a general-purpose token
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Run a dummy step
+        run: echo "This is a test job"
