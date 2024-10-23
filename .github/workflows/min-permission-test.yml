@@ -1,4 +1,4 @@
-name: Test GitHubToken Permissions
+name: Test GitHubToken Excessive Permissions
 
 on:
   push:
@@ -8,16 +8,24 @@ on:
 jobs:
   test-permissions:
     runs-on: ubuntu-latest
+
+    # Overly broad permissions for GITHUB_TOKEN
     permissions:
       contents: write
       issues: write
       pull-requests: write
       actions: write
-      statuses: write  # These permissions are too broad, especially for a general-purpose token
+      checks: write
+      deployments: write
+      statuses: write
+      packages: write
+      repository-projects: write
+      discussions: write
+      security-events: write  # This one, in particular, should raise a flag as it's typically not needed for most workflows
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
-      - name: Run a dummy step
-        run: echo "This is a test job"
+
+      - name: Dummy Step
+        run: echo "This is to test excessive token permissions"
