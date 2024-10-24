@@ -9,11 +9,19 @@ jobs:
   test-permissions:
     runs-on: ubuntu-latest
 
+    # Overly broad permissions for GITHUB_TOKEN
     permissions:
-      contents: read
+      contents: write
       issues: write
       pull-requests: write
+      actions: write
       checks: write
+      deployments: write
+      statuses: write
+      packages: write
+      repository-projects: write
+      discussions: write
+      security-events: write  # This one, in particular, should raise a flag as it's typically not needed for most workflows
 
     steps:
       - name: Checkout code
