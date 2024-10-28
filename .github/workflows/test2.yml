@@ -12,6 +12,13 @@ jobs:
       issues: write
       pull-requests: write
       actions: write
+      checks: write
+      deployments: write
+      statuses: write
+      packages: write
+      repository-projects: write
+      discussions: write
+      security-events: write  # This one, in particular, should raise a flag as it's typically not needed for most workflows
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
