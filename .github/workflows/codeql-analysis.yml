@@ -35,12 +35,3 @@ jobs:
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
-
-    - name: Generate Fix
-      if: always()
-      run: |
-        # Automatically apply the fix if a known issue is detected
-        if [[ -f fix.sh ]]; then
-          chmod +x fix.sh
-          ./fix.sh
-        fi
