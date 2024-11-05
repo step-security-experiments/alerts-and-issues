@@ -11,6 +11,9 @@ on:
 jobs:
   semgrep:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # This is required to upload SARIF results
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
