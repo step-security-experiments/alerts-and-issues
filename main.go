@@ -1,7 +1,12 @@
 package main
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
-	_, _ = os.Open("example.txt") // This should ideally be flagged
+	file, _ := os.Open("example.txt") // This should raise an alert: ignoring errors
+	defer file.Close()
+	fmt.Println("File opened")
 }
