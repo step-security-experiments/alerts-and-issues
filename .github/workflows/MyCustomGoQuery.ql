@@ -1,5 +1,5 @@
 import go
 
 from CallExpr call
-where call.getFunc().getName() = "os.Open"
-select call, "Using 'os.Open' without proper error handling can lead to resource leaks."
+where call.getFunc().getName() = "unsafeFunctionName"  
+select call, "This function call may be unsafe or require additional checks."
