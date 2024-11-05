@@ -1,0 +1,9 @@
+rules:
+  - id: detect-net-http
+    patterns:
+      - pattern: |
+          import "net/http"
+    message: "The 'net/http' package is used in this file. Review for potential security risks."
+    severity: WARNING
+    languages:
+      - go
