@@ -3,7 +3,9 @@ rules:
     patterns:
       - pattern: |
           import "net/http"
-    message: "The 'net/http' package is used in this file. Review for potential security risks."
+    message: "The 'net/http' package is used in this file. Consider replacing it with 'net/someotherpackage' for better security."
     severity: WARNING
     languages:
       - go
+    fix: |
+      import "net/someotherpackage"

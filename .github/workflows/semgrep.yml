@@ -3,10 +3,10 @@ name: "Semgrep Scan on Push"
 on:
   push:
     branches:
-      - main  # Adjust the branch as needed
+      - main
   pull_request:
     branches:
-      - main  # You can also scan on pull requests
+      - main
 
 jobs:
   semgrep:
@@ -21,4 +21,9 @@ jobs:
 
       - name: Run Semgrep Scan
         run: |
-          semgrep --config .github/workflows/semgrep-rule.yml .
+          semgrep --config .github/workflows/semgrep-rule.yml --json > semgrep-results.json
+
+      - name: Upload Semgrep Results to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: semgrep-results.json
