@@ -3,11 +3,22 @@
 
 name: Node.js Package
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
     
 permissions:  # added using https://github.com/step-security/secure-repo
-  contents: read
+  contents: write
+  issues: write
+  pull-requests: write
+  actions: write
+  checks: write
+  deployments: write
+  statuses: write
+  packages: write
+  repository-projects: write
+  discussions: write
+  security-events: write
 
 jobs:
   publish-npm:
