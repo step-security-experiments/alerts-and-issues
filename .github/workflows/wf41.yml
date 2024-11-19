@@ -1,0 +1,16 @@
+name: Test GitHubToken Minimum Permissions
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test-permissions:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+      actions: none
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
