@@ -1,0 +1,59 @@
+name: Create Dependabot Issues
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs daily at midnight UTC
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Fetch Dependabot Alerts
+      - name: Fetch Dependabot Alerts
+        id: fetch_alerts
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const alerts = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              headers: {
+                authorization: `Bearer ${process.env.DEPENDABOT_TOKEN}`
+              }
+            });
+            return alerts.data;
+
+      # Step 2: Create Issues for Each Alert
+      - name: Create Issues for Alerts
+        if: ${{ steps.fetch_alerts.outputs.result }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const alerts = ${{ steps.fetch_alerts.outputs.result }};
+            for (const alert of alerts) {
+              const issueTitle = `Dependabot Alert: ${alert.security_advisory.summary}`;
+              const issueBody = `
+### Vulnerability Details
+
+**Dependency:** ${alert.package.name}  
+**Severity:** ${alert.security_advisory.severity}  
+**Vulnerable Version:** ${alert.vulnerable_requirements}  
+**Description:**  
+${alert.security_advisory.description}
+
+### Suggested Fix
+Upgrade to: ${alert.security_advisory.references?.[0]?.url || 'No fix available'}
+
+_This issue was automatically created by a GitHub Action._
+`;
+              await github.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: issueBody,
+                labels: ['dependabot', 'security']
+              });
+            }
+env:
+  DEPENDABOT_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
