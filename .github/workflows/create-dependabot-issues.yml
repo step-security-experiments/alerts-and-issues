@@ -15,22 +15,21 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const alerts = await github.request('GET /repos/{owner}/{repo}/dependabot/alerts', {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+            const alerts = await github.request('GET /repos/' + context.repo.owner + '/' + context.repo.repo + '/dependabot/alerts', {
               headers: {
                 authorization: `Bearer ${process.env.DEPENDABOT_TOKEN}`
               }
             });
-            return alerts.data;
+            return JSON.stringify(alerts.data); # Ensure output is stringified for compatibility
+          result-encoding: string # Required for non-object data outputs
 
       # Step 2: Create Issues for Each Alert
       - name: Create Issues for Alerts
-        if: ${{ steps.fetch_alerts.outputs.result }}
+        if: ${{ steps.fetch_alerts.outputs.result != '' }}
         uses: actions/github-script@v6
         with:
           script: |
-            const alerts = ${{ steps.fetch_alerts.outputs.result }};
+            const alerts = JSON.parse(${{ steps.fetch_alerts.outputs.result }});
             for (const alert of alerts) {
               const issueTitle = `Dependabot Alert: ${alert.security_advisory.summary}`;
               const issueBody = `
