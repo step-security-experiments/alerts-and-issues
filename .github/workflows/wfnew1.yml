@@ -1,4 +1,4 @@
-name: Test GitHubToken Excessive Permissionswfnew1
+name: Test GitHubToken Excessive Permissions wfnew1
 on:
   push:
     branches:
