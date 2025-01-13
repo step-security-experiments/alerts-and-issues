@@ -24,8 +24,13 @@ jobs:
   publish-npm:
     runs-on: ubuntu-latest  
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout2@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@7c12f8017d5436eb855f1ed4399f037a36fbd9e8 # v2.5.2
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
